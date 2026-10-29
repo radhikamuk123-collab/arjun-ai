@@ -12,7 +12,7 @@ st.caption("🌐 Powered by Arjun | Visit: arjunhub.com")
 if "chat" not in st.session_state:
     client = genai.Client(api_key=API_KEY)
     st.session_state.chat = client.chats.create(
-        model="gemini-2.5-flash",
+        model="gemini-3.8-flash",
         config={"system_instruction": SYSTEM_INSTRUCTION}
     )
 
@@ -24,7 +24,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# User Input Box - Dunia ka har sawal poochne ke liye ready
+# User Input Box
 if user_input := st.chat_input("Apna koi bhi sawal yahan pucho (e.g., Physics, Coding, Life, etc.)..."):
     # Append user message
     st.session_state.messages.append({"role": "user", "content": user_input})
@@ -45,7 +45,7 @@ if user_input := st.chat_input("Apna koi bhi sawal yahan pucho (e.g., Physics, C
                 try:
                     client = genai.Client(api_key=API_KEY)
                     st.session_state.chat = client.chats.create(
-                        model="gemini-2.5-flash",
+                        model="gemini-3.8-flash",
                         config={"system_instruction": SYSTEM_INSTRUCTION}
                     )
                     response = st.session_state.chat.send_message(user_input)
