@@ -13,7 +13,11 @@ if "chat" not in st.session_state:
     client = genai.Client(api_key=API_KEY)
     st.session_state.chat = client.chats.create(
         model="gemini-3.8-flash",
-        config={"system_instruction": SYSTEM_INSTRUCTION}
+        config={
+            "system_instruction": SYSTEM_INSTRUCTION,
+            "temperature": 0.7,
+            "max_output_tokens": 1000,
+        }
     )
 
 if "messages" not in st.session_state:
@@ -25,7 +29,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # User Input Box
-if user_input := st.chat_input("Apna koi bhi sawal yahan pucho (e.g., Physics, Coding, Life, etc.)..."):
+if user_input := st.chat_input("Apna koi bhi sawal yahan pucho..."):
     # Append user message
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
@@ -38,15 +42,17 @@ if user_input := st.chat_input("Apna koi bhi sawal yahan pucho (e.g., Physics, C
                 response = st.session_state.chat.send_message(user_input)
                 ai_reply = response.text
                 st.markdown(ai_reply)
-                # Append assistant message
                 st.session_state.messages.append({"role": "assistant", "content": ai_reply})
             except Exception as e:
-                # Auto-reconnect if client closed or network issue
                 try:
                     client = genai.Client(api_key=API_KEY)
                     st.session_state.chat = client.chats.create(
                         model="gemini-3.8-flash",
-                        config={"system_instruction": SYSTEM_INSTRUCTION}
+                        config={
+                            "system_instruction": SYSTEM_INSTRUCTION,
+                            "temperature": 0.7,
+                            "max_output_tokens": 1000,
+                        }
                     )
                     response = st.session_state.chat.send_message(user_input)
                     ai_reply = response.text
